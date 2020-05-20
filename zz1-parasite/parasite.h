@@ -1,6 +1,11 @@
+#ifndef PARASITE
+#define PARASITE
+
 #include <stdlib.h>
 #include <getopt.h>
 #include <stdio.h>
+
+#define  BUFF_SIZE 16
 
 typedef struct dataStruct
 {
@@ -11,10 +16,14 @@ typedef struct dataStruct
 
 } DataStruct;
 
-DataStruct givenData = {.signal=-1, .pid=-1, .requestsInterval=-1, .initialRegisterValue=-1};
+DataStruct givenData;
+float requestsRegister;
 
-void readParameters(int argc, char **argv);
+void readParameters(int argc, char *argv[]);
 void sendRequest();
 void signalHandler();
 void sendReminder();
 void checkResponse();
+char *itostr(int i);
+
+#endif
