@@ -63,8 +63,7 @@ void readParameters(int argc, char *argv[]) {
 }
 
 void sendRequest() {
-  char *buffer;
-  buffer = itostr(givenData.pid);
+  char *buffer = itostr(givenData.pid);
   strcat(buffer, " ");
   char *requestsString = malloc(BUFF_SIZE * sizeof(char));
   strcat(buffer, gcvt(requestsRegister, 10, requestsString));
