@@ -1,4 +1,5 @@
 #include "parasite.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -64,7 +65,12 @@ void readParameters(int argc, char *argv[]) {
 void sendRequest() {
   char *buffer;
   buffer = itostr(givenData.pid);
-  write(1, buffer, BUFF_SIZE);
+  strcat(buffer, " ");
+  char *requestsString = malloc(BUFF_SIZE * sizeof(char));
+  strcat(buffer, gcvt(requestsRegister, 10, requestsString));
+  strcat(buffer, "\n");
+  write(1, buffer, sizeof(buffer));
+  
 }
 
 char *itostr(int x) {
@@ -77,14 +83,14 @@ char *itostr(int x) {
   }
   do {
     p--;
-    *p = (char) ('0' - i % 10);
+    *p = (char)('0' - i % 10);
     i /= 10;
   } while (i);
   if (x < 0) {
     p--;
     *p = '-';
   }
-  size_t len = (size_t) (&buf[sizeof buf] - p);
+  size_t len = (size_t)(&buf[sizeof buf] - p);
   char *s = malloc(len);
   if (s) {
     memcpy(s, p, len);

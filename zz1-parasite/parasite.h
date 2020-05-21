@@ -5,7 +5,7 @@
 #include <getopt.h>
 #include <stdio.h>
 
-#define  BUFF_SIZE 16
+#define BUFF_SIZE 64
 
 typedef struct dataStruct
 {
