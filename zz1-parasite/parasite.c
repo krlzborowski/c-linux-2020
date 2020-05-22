@@ -62,6 +62,15 @@ void readParameters(int argc, char *argv[]) {
   }
 }
 
+void initGlobals() {
+  isSigPipe = 0;
+  isConfirmation = 0;
+  isResponse = 0;
+  satisfiedRequestsCount = 0;
+  remindersCount = 0;
+  requestsRegister = givenData.initialRegisterValue;
+}
+
 void sendRequest() {
   char buffer[BUFF_SIZE] = {0};
   char requestsString[8];
@@ -155,11 +164,21 @@ void setInterval(struct timespec *timeInterval) {
 
 void report() {
   char buf[BUFF_SIZE] = {0};
-  strcpy(buf, "PID:                 ");
+  char requestsString[8];
+  strcpy(buf, "\nPID                 ");
   strcat(buf, itostr(getpid()));
-  strcat(buf, "\n");
-  strcat(buf, "Satisfied requests:  ");
+  strcat(buf, "\nSatisfied requests  ");
   strcat(buf, itostr(satisfiedRequestsCount));
+  strcat(buf, "\nSent reminders      ");
+  strcat(buf, itostr(remindersCount));
+  strcat(buf, "\nRequests value      ");
+  strcat(buf, gcvt(requestsRegister, 8, requestsString));
+  strcat(buf, "\nSent reminders      ");
+  strcat(buf, itostr(remindersCount));
+  strcat(buf, "\nResponses           ");
+  strcat(buf, itostr(responseCount));
+  strcat(buf, "\nConfirmed           ");
+  strcat(buf, itostr(isConfirmation));
+  strcat(buf, "\n");
   write(2, buf, sizeof(buf));
-  write(2, "\n", sizeof(char));
 }

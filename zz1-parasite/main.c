@@ -1,7 +1,9 @@
 #include "parasite.h"
+#include <time.h>
 
 int main(int argc, char *argv[]) {
   struct timespec interval;
+  struct timespec remain;
   srand(time(NULL));
 
   givenData = (DataStruct){.signal = -1,
@@ -9,25 +11,20 @@ int main(int argc, char *argv[]) {
                            .requestsInterval = -1,
                            .initialRegisterValue = -1};
   readParameters(argc, argv);
-
-  isSigPipe = 0;
-  isConfirmation = 0;
-  isResponse = 0;
-  satisfiedRequestsCount = 0;
-  remindersCount = 0;
-  requestsRegister = givenData.initialRegisterValue;
-
+  initGlobals();
   setSignalHandler();
   setInterval(&interval);
 
-  while (1) {
+  for(ever) {
     if (isSigPipe) {
       report();
       exit(141);
     }
 
     sendRequest();
-    nanosleep(&interval, NULL);
+    report();
+    nanosleep(&interval, &remain);
+
     if (isConfirmation) {
       requestsRegister += requestsRegister / 4;
       satisfiedRequestsCount++;
@@ -37,9 +34,12 @@ int main(int argc, char *argv[]) {
       sendReminder();
       if (isResponse) {
         requestsRegister -= requestsRegister / 5;
+        responseCount++;
+        isResponse = 0;
       }
-      
     }
+
+    nanosleep(&remain, NULL);
   }
 
   return 0;

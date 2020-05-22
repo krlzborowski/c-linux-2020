@@ -9,7 +9,8 @@
 #include <time.h>
 #include <string.h>
 
-#define BUFF_SIZE 64
+#define BUFF_SIZE 256
+#define ever ;;
 
 typedef struct dataStruct
 {
@@ -27,9 +28,11 @@ int isConfirmation;
 int isResponse;
 int satisfiedRequestsCount;
 int remindersCount;
+int responseCount;
 int lastSigRT;
 
 void readParameters(int argc, char *argv[]);
+void initGlobals();
 void sendRequest();
 void sendReminder();
 char *itostr(int i);
