@@ -40,7 +40,6 @@ void setSignalHandler();
 void setSigRTHandler();
 void signalHandler(int signal);
 void setInterval(struct timespec *timeInterval);
-// TODO
 void report();
 
 #endif
