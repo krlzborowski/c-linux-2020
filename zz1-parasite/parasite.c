@@ -1,8 +1,5 @@
 #include "parasite.h"
-#include <csignal>
-#include <stdlib.h>
-#include <time.h>
-#include <unistd.h>
+
 
 void readParameters(int argc, char *argv[]) {
   int opt;
@@ -147,9 +144,8 @@ void report() {
   memset(buf, 0, BUFF_SIZE);
   strcpy(buf, "PID:\t\t\t");
   strcat(buf, itostr(getpid()));
-  write(2, buf, sizeof(buf));
-  str(2, "\n", sizeof(char));
-  strcpy(buf, "Satisfied requests:\t");
+  strcat(buf, "\n");
+  strcat(buf, "Satisfied requests:\t");
   strcat(buf, itostr(satisfiedRequestsCount));
   write(2, buf, sizeof(buf));
   write(2, "\n", sizeof(char));
