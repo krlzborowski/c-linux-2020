@@ -30,12 +30,15 @@ int remindersCount;
 
 void readParameters(int argc, char *argv[]);
 void sendRequest();
-
 void sendReminder();
+// TODO
 void checkResponse();
 
 char *itostr(int i);
 void setSignalHandler();
+// TODO
+void setSigRTHandler();
+
 void signalHandler(int signal);
 void setInterval(struct timespec* timeInterval);
 void report();

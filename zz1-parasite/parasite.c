@@ -1,4 +1,5 @@
 #include "parasite.h"
+#include <csignal>
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
@@ -76,6 +77,16 @@ void sendRequest() {
   write(1, "\n", sizeof(char));
 }
 
+void sendReminder() {
+  int signal = (rand() % (SIGRTMAX - SIGRTMIN)) + SIGRTMIN;
+  union sigval sv;
+  sv.sival_ptr = NULL;
+  if (sigqueue(givenData.pid, signal, sv) == -1){
+    perror("Sigque failure\n");
+    exit(EXIT_FAILURE);
+  }
+}
+
 char *itostr(int x) {
   int i = x;
   char buf[BUFF_SIZE];
@@ -137,7 +148,7 @@ void report() {
   strcpy(buf, "PID:\t\t\t");
   strcat(buf, itostr(getpid()));
   write(2, buf, sizeof(buf));
-  write(2, "\n", sizeof(char));
+  str(2, "\n", sizeof(char));
   strcpy(buf, "Satisfied requests:\t");
   strcat(buf, itostr(satisfiedRequestsCount));
   write(2, buf, sizeof(buf));

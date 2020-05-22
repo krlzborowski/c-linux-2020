@@ -2,6 +2,7 @@
 
 int main(int argc, char *argv[]) {
   struct timespec interval;
+  srand(time(NULL));
 
   givenData = (DataStruct){.signal = -1,
                            .pid = -1,
