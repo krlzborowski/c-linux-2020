@@ -1,6 +1,5 @@
 #include "parasite.h"
 
-
 void readParameters(int argc, char *argv[]) {
   int opt;
   while ((opt = getopt(argc, argv, "spdv")) != -1) {
@@ -70,7 +69,6 @@ void sendRequest() {
   strcat(buffer, " ");
   strcat(buffer, gcvt(requestsRegister, 8, requestsString));
   strcat(buffer, "\n");
-  memcpy(lastWhim, buffer, sizeof(buffer));
   write(1, buffer, sizeof(buffer));
 }
 
@@ -78,10 +76,13 @@ void sendReminder() {
   int signal = (rand() % (SIGRTMAX - SIGRTMIN)) + SIGRTMIN;
   union sigval sv;
   sv.sival_ptr = NULL;
-  if (sigqueue(givenData.pid, signal, sv) == -1){
-    perror("Sigque failure\n");
+  if (sigqueue(givenData.pid, signal, sv) == -1) {
+    perror("Sigque failure");
     exit(EXIT_FAILURE);
   }
+  remindersCount++;
+  lastSigRT = signal;
+  setSigRTHandler();
 }
 
 char *itostr(int x) {
@@ -124,12 +125,25 @@ void setSignalHandler() {
   }
 }
 
+void setSigRTHandler() {
+  struct sigaction signalAction;
+  sigemptyset(&signalAction.sa_mask);
+  signalAction.sa_flags = SA_RESETHAND;
+  signalAction.sa_handler = signalHandler;
+  if (sigaction(lastSigRT, &signalAction, NULL) == -1) {
+    perror("Sigaction error:");
+    exit(EXIT_FAILURE);
+  }
+}
+
 void signalHandler(int signal) {
 
-  if (signal == givenData.signal)
+  if (signal == givenData.signal) {
     isConfirmation = 1;
-  else if (signal == SIGPIPE) {
+  } else if (signal == SIGPIPE) {
     isSigPipe = 1;
+  } else if (signal == lastSigRT) {
+    isResponse = 1;
   }
 }
 
@@ -141,10 +155,10 @@ void setInterval(struct timespec *timeInterval) {
 
 void report() {
   char buf[BUFF_SIZE] = {0};
-  strcpy(buf, "PID:\t\t\t");
+  strcpy(buf, "PID:                 ");
   strcat(buf, itostr(getpid()));
   strcat(buf, "\n");
-  strcat(buf, "Satisfied requests:\t");
+  strcat(buf, "Satisfied requests:  ");
   strcat(buf, itostr(satisfiedRequestsCount));
   write(2, buf, sizeof(buf));
   write(2, "\n", sizeof(char));

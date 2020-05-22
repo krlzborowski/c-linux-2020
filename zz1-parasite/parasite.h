@@ -27,21 +27,17 @@ int isConfirmation;
 int isResponse;
 int satisfiedRequestsCount;
 int remindersCount;
-char *lastWhim;
+int lastSigRT;
 
 void readParameters(int argc, char *argv[]);
 void sendRequest();
 void sendReminder();
-// TODO
-void checkResponse();
-
 char *itostr(int i);
 void setSignalHandler();
-// TODO
-void setSigRTHandler(int rtSignal);
-
+void setSigRTHandler();
 void signalHandler(int signal);
-void setInterval(struct timespec* timeInterval);
+void setInterval(struct timespec *timeInterval);
+// TODO
 void report();
 
 #endif

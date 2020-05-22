@@ -1,5 +1,4 @@
 #include "parasite.h"
-#include <stdlib.h>
 
 int main(int argc, char *argv[]) {
   struct timespec interval;
@@ -17,7 +16,6 @@ int main(int argc, char *argv[]) {
   satisfiedRequestsCount = 0;
   remindersCount = 0;
   requestsRegister = givenData.initialRegisterValue;
-  lastWhim = malloc(BUFF_SIZE * sizeof(char));
 
   setSignalHandler();
   setInterval(&interval);
@@ -34,6 +32,13 @@ int main(int argc, char *argv[]) {
       requestsRegister += requestsRegister / 4;
       satisfiedRequestsCount++;
       isConfirmation = 0;
+    } else {
+
+      sendReminder();
+      if (isResponse) {
+        requestsRegister -= requestsRegister / 5;
+      }
+      
     }
   }
 
