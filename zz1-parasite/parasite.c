@@ -64,14 +64,14 @@ void readParameters(int argc, char *argv[]) {
 }
 
 void sendRequest() {
-  char *buffer = calloc(BUFF_SIZE, sizeof(char));
-  char *requestsString = calloc(16, sizeof(char));
-
+  char buffer[BUFF_SIZE] = {0};
+  char requestsString[8];
   strcpy(buffer, itostr(givenData.pid));
   strcat(buffer, " ");
-  strcat(buffer, gcvt(requestsRegister, 5, requestsString));
+  strcat(buffer, gcvt(requestsRegister, 8, requestsString));
+  strcat(buffer, "\n");
+  memcpy(lastWhim, buffer, sizeof(buffer));
   write(1, buffer, sizeof(buffer));
-  write(1, "\n", sizeof(char));
 }
 
 void sendReminder() {
@@ -140,8 +140,7 @@ void setInterval(struct timespec *timeInterval) {
 }
 
 void report() {
-  char buf[BUFF_SIZE];
-  memset(buf, 0, BUFF_SIZE);
+  char buf[BUFF_SIZE] = {0};
   strcpy(buf, "PID:\t\t\t");
   strcat(buf, itostr(getpid()));
   strcat(buf, "\n");
