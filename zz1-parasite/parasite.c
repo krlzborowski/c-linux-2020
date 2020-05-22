@@ -103,6 +103,7 @@ char *itostr(int x) {
 
 void setSignalHandler() {
   struct sigaction signalAction;
+  memset(&signalAction, '\0', sizeof(signalAction));
   signalAction.sa_flags = 0;
   signalAction.sa_handler = signalHandler;
   if (sigaction(SIGPIPE, &signalAction, NULL) == -1) {
@@ -132,7 +133,8 @@ void setInterval(struct timespec *timeInterval) {
 
 void report() {
   char buf[BUFF_SIZE];
-  strcpy(buf, "PID:\t");
+  memset(buf, 0, BUFF_SIZE);
+  strcpy(buf, "PID:\t\t\t");
   strcat(buf, itostr(getpid()));
   write(2, buf, sizeof(buf));
   write(2, "\n", sizeof(char));
