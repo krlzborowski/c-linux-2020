@@ -1,3 +1,10 @@
+# Editor files
+.vscode/
+
+# Packages
+*.tar.gz
+*.tgz
+
 # Prerequisites
 *.d
 
