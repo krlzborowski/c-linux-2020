@@ -68,17 +68,21 @@ void initGlobals() {
   isResponse = 0;
   satisfiedRequestsCount = 0;
   remindersCount = 0;
+  totalRemindersCount = 0;
   requestsRegister = givenData.initialRegisterValue;
 }
 
 void sendRequest() {
   char buffer[BUFF_SIZE] = {0};
-  char requestsString[8];
+  char requestsString[BUFF_SIZE] = {0};
+
   strcpy(buffer, itostr(givenData.pid));
   strcat(buffer, " ");
-  strcat(buffer, gcvt(requestsRegister, 8, requestsString));
-  strcat(buffer, "\n");
   write(1, buffer, sizeof(buffer));
+
+  gcvt(requestsRegister, 5, requestsString);
+  strcat(requestsString, "\n");
+  write(1, requestsString, sizeof(requestsString));
 }
 
 void sendReminder() {
@@ -90,6 +94,7 @@ void sendReminder() {
     exit(EXIT_FAILURE);
   }
   remindersCount++;
+  totalRemindersCount++;
   lastSigRT = signal;
   setSigRTHandler();
 }
@@ -165,19 +170,19 @@ void setInterval(struct timespec *timeInterval) {
 void report() {
   char buf[BUFF_SIZE] = {0};
   char requestsString[8];
-  strcpy(buf, "\nPID                 ");
+  strcpy(buf, "\nPID                  ");
   strcat(buf, itostr(getpid()));
-  strcat(buf, "\nSatisfied requests  ");
+  strcat(buf, "\nSatisfied requests   ");
   strcat(buf, itostr(satisfiedRequestsCount));
-  strcat(buf, "\nSent reminders      ");
-  strcat(buf, itostr(remindersCount));
-  strcat(buf, "\nRequests value      ");
+  strcat(buf, "\nTotal sent reminders ");
+  strcat(buf, itostr(totalRemindersCount));
+  strcat(buf, "\nRequests value       ");
   strcat(buf, gcvt(requestsRegister, 8, requestsString));
-  strcat(buf, "\nSent reminders      ");
+  strcat(buf, "\nSent reminders       ");
   strcat(buf, itostr(remindersCount));
-  strcat(buf, "\nResponses           ");
+  strcat(buf, "\nResponses            ");
   strcat(buf, itostr(responseCount));
-  strcat(buf, "\nConfirmed           ");
+  strcat(buf, "\nConfirmed            ");
   strcat(buf, itostr(isConfirmation));
   strcat(buf, "\n");
   write(2, buf, sizeof(buf));

@@ -22,7 +22,6 @@ int main(int argc, char *argv[]) {
     }
 
     sendRequest();
-    report();
     nanosleep(&interval, &remain);
 
     if (isConfirmation) {
@@ -35,6 +34,7 @@ int main(int argc, char *argv[]) {
       if (isResponse) {
         requestsRegister -= requestsRegister / 5;
         responseCount++;
+        remindersCount = 0;
         isResponse = 0;
       }
     }

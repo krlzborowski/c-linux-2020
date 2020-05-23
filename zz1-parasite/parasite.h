@@ -29,6 +29,7 @@ int isResponse;
 int satisfiedRequestsCount;
 int remindersCount;
 int responseCount;
+int totalRemindersCount;
 int lastSigRT;
 
 void readParameters(int argc, char *argv[]);
