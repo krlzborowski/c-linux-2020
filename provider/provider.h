@@ -12,12 +12,13 @@
 
 #define ever ;;
 #define BUF_SIZE 128
+#define SIGRT_NUM SIGRTMAX-SIGRTMIN+1
 
 typedef struct dataStruct {
   int signal;
   float incrementValue;
   float interval;
-  float notKilledPercent;
+  float notKillingPercent;
   float sendResponsePercent;
 
 } DataStruct;
@@ -25,14 +26,14 @@ typedef struct dataStruct {
 DataStruct givenData;
 float resource;
 timer_t timer;
+int isAnsweringSignal;
 
 void readParameters(int argc, char *argv[]);
 void createTimer();
 void setTimer();
-void harvest(union sigval sv);
+void onTimer(union sigval sv);
 void processRequest(int pid, float toSubstract);
-// void setSignalHandler();
-// void signalHandler();
-// void timerHandler();
+void setSignalHandlers();
+void answer(int signal, siginfo_t *info, void *ucontext);
 
 #endif
