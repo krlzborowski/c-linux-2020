@@ -31,10 +31,6 @@ void readParameters(int argc, char *argv[]) {
     }
   }
 
-  printf("%d %d %f %f\n", givenData.signal, givenData.pid,
-         givenData.initialRegisterValue, givenData.requestsInterval);
-  fflush(stdout);
-
   if (givenData.signal == -1 || givenData.pid == -1 ||
       givenData.requestsInterval == -1 ||
       givenData.initialRegisterValue == -1) {
@@ -43,6 +39,9 @@ void readParameters(int argc, char *argv[]) {
             argv[0]);
     exit(EXIT_FAILURE);
   }
+  printf("%d %d %f %f\n", givenData.signal, givenData.pid,
+         givenData.requestsInterval, givenData.initialRegisterValue);
+  fflush(stdout);
 }
 
 void initGlobals() {

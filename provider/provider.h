@@ -1,6 +1,12 @@
 #ifndef PROVIDER
 #define PROVIDER
 
+#if defined MAIN
+#define EXTERN
+#else
+#define EXTERN extern
+#endif
+
 #include <bits/types/struct_itimerspec.h>
 #include <getopt.h>
 #include <signal.h>
@@ -23,10 +29,10 @@ typedef struct dataStruct {
 
 } DataStruct;
 
-DataStruct givenData;
-float resource;
-timer_t timer;
-int isAnsweringSignal;
+EXTERN DataStruct givenData;
+EXTERN float resource;
+EXTERN timer_t timer;
+EXTERN int isAnsweringSignal;
 
 void readParameters(int argc, char *argv[]);
 void createTimer();

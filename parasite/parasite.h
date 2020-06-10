@@ -1,6 +1,12 @@
 #ifndef PARASITE
 #define PARASITE
 
+#if defined MAIN
+#define EXTERN
+#else
+#define EXTERN extern
+#endif
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <getopt.h>
@@ -21,16 +27,16 @@ typedef struct dataStruct
 
 } DataStruct;
 
-DataStruct givenData;
-float requestsRegister;
-int isSigPipe;
-int isConfirmation;
-int isResponse;
-int satisfiedRequestsCount;
-int remindersCount;
-int responseCount;
-int totalRemindersCount;
-int lastSigRT;
+EXTERN DataStruct givenData;
+EXTERN float requestsRegister;
+EXTERN int isSigPipe;
+EXTERN int isConfirmation;
+EXTERN int isResponse;
+EXTERN int satisfiedRequestsCount;
+EXTERN int remindersCount;
+EXTERN int responseCount;
+EXTERN int totalRemindersCount;
+EXTERN int lastSigRT;
 
 void readParameters(int argc, char *argv[]);
 void initGlobals();

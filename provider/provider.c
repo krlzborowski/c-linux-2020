@@ -3,18 +3,14 @@
 void readParameters(int argc, char *argv[]) {
   int opt;
   char *p;
-  while ((opt = getopt(argc, argv, "sh")) != -1) {
+  while ((opt = getopt(argc, argv, "s:h:")) != -1) {
     switch (opt) {
     case 's':
-      givenData.signal = (int)strtol(argv[optind], &p, 10);
-      if (*p != '\0') {
-        fprintf(stderr, "Wrong signal format\n");
-        exit(EXIT_FAILURE);
-      }
+      givenData.signal = (int)strtol(optarg, &p, 10);
       break;
 
     case 'h':
-      givenData.incrementValue = strtof(argv[optind], &p);
+      givenData.incrementValue = strtof(optarg, &p);
       if (*p != '/') {
         fprintf(stderr, "Wrong pace format\n");
         exit(EXIT_FAILURE);
@@ -22,11 +18,6 @@ void readParameters(int argc, char *argv[]) {
 
       p++;
       givenData.interval = strtof(p, &p);
-
-      if (*p != '\0') {
-        fprintf(stderr, "Wrong pace format\n");
-        exit(EXIT_FAILURE);
-      }
       break;
 
     default:
@@ -57,6 +48,9 @@ void readParameters(int argc, char *argv[]) {
             argv[0]);
     exit(EXIT_FAILURE);
   }
+
+  printf("%d %f %f %f %f\n", givenData.signal, givenData.incrementValue, givenData.interval, givenData.notKillingPercent, givenData.sendResponsePercent);
+  fflush(stdout);
 }
 
 void createTimer() {

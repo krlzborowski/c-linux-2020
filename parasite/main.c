@@ -1,3 +1,5 @@
+#define MAIN
+
 #include "parasite.h"
 #include <time.h>
 

@@ -1,10 +1,10 @@
 all: provider
 
 provider: main.o provider.o
-	gcc -o $@ main.o provider.o -lrt
+	gcc -Wall -o $@ main.o provider.o -lrt
 
 main.o: main.c
-	gcc -c $<
+	gcc -Wall -c $<
 
 provider.o: provider.c provider.h
 	gcc -c -lrt -Wall $<
