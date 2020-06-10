@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
       exit(141);
     }
 
-    printf("%d %f\n", pid, requestsRegister);
+    fprintf(stdout, "%d %f\n", pid, requestsRegister);
     fflush(stdout);
     nanosleep(&interval, &remain);
 

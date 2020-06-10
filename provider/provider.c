@@ -48,9 +48,6 @@ void readParameters(int argc, char *argv[]) {
             argv[0]);
     exit(EXIT_FAILURE);
   }
-
-  printf("%d %f %f %f %f\n", givenData.signal, givenData.incrementValue, givenData.interval, givenData.notKillingPercent, givenData.sendResponsePercent);
-  fflush(stdout);
 }
 
 void createTimer() {

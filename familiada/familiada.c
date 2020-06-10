@@ -78,14 +78,14 @@ void produceProcesses(int processesCount, int *pipeFd) {
     exit(EXIT_SUCCESS);
   default: {
     char *args[] = {
-        "./provider/provider", "-s", givenData.signal, "-h", givenData.pace,
+        "./ODP/provider", "-s", givenData.signal, "-h", givenData.pace,
         givenData.endurance,    NULL};
 
     if (dup2(pipeFd[0], STDIN_FILENO) == -1) {
       perror("Dup2 failure");
       exit(EXIT_FAILURE);
     }
-    if (execv("./provider/provider", args) == -1) {
+    if (execv("./ODP/provider", args) == -1) {
       perror("Execv failure");
       exit(EXIT_FAILURE);
     }
@@ -104,7 +104,7 @@ void produceParasites(int processesCount, pid_t pid, int *pipeFd) {
       char *toSeparate = strdup(givenData.positionals[i]);
       char *interval = strsep(&toSeparate, ":");
       char *initialValue = strsep(&toSeparate, ":");
-      char *args[] = {"./parasite/parasite",
+      char *args[] = {"./ODP/parasite",
                       strcat("-s", givenData.signal),
                       "-p",
                       strcat("-d", interval),
@@ -116,7 +116,9 @@ void produceParasites(int processesCount, pid_t pid, int *pipeFd) {
         perror("Dup2 failure");
         exit(EXIT_FAILURE);
       }
-      if (execv("./parasite/parasite", args) == -1) {
+
+      if (execv("./ODP/parasite", args) == -1)
+      {
         fprintf(stderr, "Execv failure\n");
         exit(EXIT_FAILURE);
       }
