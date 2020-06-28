@@ -29,9 +29,9 @@ typedef struct dataStruct
 
 EXTERN DataStruct givenData;
 EXTERN float requestsRegister;
-EXTERN int isSigPipe;
-EXTERN int isConfirmation;
-EXTERN int isResponse;
+EXTERN volatile sig_atomic_t isSigPipe;
+EXTERN volatile sig_atomic_t isConfirmation;
+EXTERN volatile sig_atomic_t isResponse;
 EXTERN int satisfiedRequestsCount;
 EXTERN int remindersCount;
 EXTERN int responseCount;

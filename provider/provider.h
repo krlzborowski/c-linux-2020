@@ -7,14 +7,14 @@
 #define EXTERN extern
 #endif
 
-#include <bits/types/struct_itimerspec.h>
+#include <unistd.h>
 #include <getopt.h>
 #include <signal.h>
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
-#include <unistd.h>
+
 
 #define ever ;;
 #define BUF_SIZE 128

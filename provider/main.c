@@ -9,6 +9,7 @@ int main(int argc, char *argv[]) {
   srand(time(NULL));
 
   readParameters(argc, argv);
+  setSignalHandlers();
   createTimer();
   for (ever) {
     scanf("%d %f", &pid, &toSubstract);
