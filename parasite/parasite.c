@@ -7,6 +7,31 @@ void readParameters(int argc, char *argv[]) {
     switch (opt) {
     case 's':
       givenData.signal = (int)strtol(optarg, &p, 10);
+      // printf("--%c--\n", *p);
+      // fflush(stdout);
+      if (optarg == p || errno != 0 || *p != 0) {
+        fprintf(stderr, "Wrong signal format\n");
+        exit(EXIT_FAILURE);
+      }
+      // if (optarg == p)
+      //   printf(" number : %d  invalid  (no digits found, 0 returned)\n",
+      //          number);
+      // else if (errno == ERANGE && number == INT_MIN)
+      //   printf(" number : %d  invalid  (underflow occurred)\n", number);
+      // else if (errno == ERANGE && number == INT_MAX)
+      //   printf(" number : %d  invalid  (overflow occurred)\n", number);
+      // else if (errno == EINVAL)
+      //   printf(" number : %d  invalid  (base contains unsupported value)\n",
+      //          number);
+      // else if (errno != 0 && number == 0)
+      //   printf(" number : %d  invalid  (unspecified error occurred)\n", number);
+      // else if (errno == 0 && optarg && !*p)
+      //   printf(" number : %d    valid  (and represents all characters read)\n",
+      //          number);
+      // else if (errno == 0 && optarg && *p != 0)
+      //   printf(" number : %d    valid  (but additional characters remain)\n",
+      //          number);
+
       if (givenData.signal == SIGPIPE) {
         fprintf(stderr, "Can't use SIGPIPE\n");
         exit(EXIT_FAILURE);
@@ -14,12 +39,24 @@ void readParameters(int argc, char *argv[]) {
       break;
     case 'p':
       givenData.pid = (int)strtol(optarg, &p, 10);
+      if (optarg == p || errno != 0 || *p != 0) {
+        fprintf(stderr, "Wrong pid format\n");
+        exit(EXIT_FAILURE);
+      }
       break;
     case 'd':
       givenData.requestsInterval = strtof(optarg, &p);
+      if (optarg == p || errno != 0 || *p != 0) {
+        fprintf(stderr, "Wrong interval format\n");
+        exit(EXIT_FAILURE);
+      }
       break;
     case 'v':
       givenData.initialRegisterValue = strtof(optarg, &p);
+      if (optarg == p || errno != 0 || *p != 0) {
+        fprintf(stderr, "Wrong register value format\n");
+        exit(EXIT_FAILURE);
+      }
       break;
 
     default:
@@ -31,6 +68,10 @@ void readParameters(int argc, char *argv[]) {
     }
   }
 
+  fprintf(stdout, "%d\t%d\t%f\t%f", givenData.signal, givenData.pid,
+          givenData.requestsInterval, givenData.initialRegisterValue);
+  fflush(stdout);
+
   if (givenData.signal == -1 || givenData.pid == -1 ||
       givenData.requestsInterval == -1 ||
       givenData.initialRegisterValue == -1) {
@@ -39,9 +80,6 @@ void readParameters(int argc, char *argv[]) {
             argv[0]);
     exit(EXIT_FAILURE);
   }
-  printf("%d %d %f %f\n", givenData.signal, givenData.pid,
-         givenData.requestsInterval, givenData.initialRegisterValue);
-  fflush(stdout);
 }
 
 void initGlobals() {

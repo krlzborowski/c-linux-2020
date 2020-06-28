@@ -14,6 +14,8 @@
 #include <signal.h>
 #include <time.h>
 #include <string.h>
+#include <errno.h>
+#include <limits.h>
 
 #define BUFF_SIZE 256
 #define ever ;;

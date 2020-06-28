@@ -11,10 +11,12 @@ int main(int argc, char *argv[]) {
   readParameters(argc, argv);
   setSignalHandlers();
   createTimer();
+
   for (ever) {
     scanf("%d %f", &pid, &toSubstract);
     processRequest(pid, givenData.signal);
   }
+  
   timer_delete(timer);
   return 0;
 }
