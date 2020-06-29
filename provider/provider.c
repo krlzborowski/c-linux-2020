@@ -7,17 +7,25 @@ void readParameters(int argc, char *argv[]) {
     switch (opt) {
     case 's':
       givenData.signal = (int)strtol(optarg, &p, 10);
+      if (optarg == p || errno != 0 || *p != 0) {
+        fprintf(stderr, "Wrong signal format\n");
+        exit(EXIT_FAILURE);
+      }
       break;
 
     case 'h':
       givenData.incrementValue = strtof(optarg, &p);
-      if (*p != '/') {
+      if (errno != 0 || *p != '/') {
         fprintf(stderr, "Wrong pace format\n");
         exit(EXIT_FAILURE);
       }
 
       p++;
       givenData.interval = strtof(p, &p);
+      if (optarg == p || errno != 0 || *p != 0 ) {
+        fprintf(stderr, "Wrong interval format\n");
+        exit(EXIT_FAILURE);
+      }
       break;
 
     default:
@@ -35,17 +43,15 @@ void readParameters(int argc, char *argv[]) {
 
   givenData.notKillingPercent = strtof(argv[optind], &p);
 
-  if (*p != '/') {
+  if (errno != 0 || *p != '/') {
     fprintf(stderr, "Wrong RT tolerancy format\n");
     exit(EXIT_FAILURE);
   }
 
   p++;
   givenData.sendResponsePercent = strtof(p, &p);
-
-  if (*p != '\0') {
-    fprintf(stderr, "Usage: %s <float>/<float> -s <int> -h <float>/<float> \n",
-            argv[0]);
+  if (optarg == p || errno != 0 || *p != 0) {
+    fprintf(stderr, "Wrong response percentage format\n");
     exit(EXIT_FAILURE);
   }
 }

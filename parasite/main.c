@@ -4,6 +4,10 @@
 #include <time.h>
 
 int main(int argc, char *argv[]) {
+
+  fprintf(stderr, "Parasite ready\n");
+  fflush(stderr);
+  
   int pid = getpid();
   struct timespec interval;
   struct timespec remain;
@@ -17,6 +21,8 @@ int main(int argc, char *argv[]) {
   initGlobals();
   setSignalHandler();
   setInterval(&interval);
+
+
 
   for(ever) {
     if (isSigPipe) {

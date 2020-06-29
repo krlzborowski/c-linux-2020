@@ -12,6 +12,9 @@ int main(int argc, char *argv[]) {
   setSignalHandlers();
   createTimer();
 
+  fprintf(stderr, "Provider ready\n");
+  fflush(stderr);
+
   for (ever) {
     scanf("%d %f", &pid, &toSubstract);
     processRequest(pid, givenData.signal);

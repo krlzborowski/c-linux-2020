@@ -5,26 +5,36 @@ int readParameters(int argc, char **argv) {
   int opt;
   int signal = SIGHUP;
   givenData.signal = "1";
-  while ((opt = getopt(argc, argv, "s::h:r:")) != -1) {
+  errno = 0;
+  while ((opt = getopt(argc, argv, "s:h:r:")) != -1) {
     char *p;
     switch (opt) {
     case 's':
-      signal = (int)strtol(optarg, NULL, 10);
+      signal = (int)strtol(optarg, &p, 10);
+
+      if (optarg == p || errno != 0 || *p != 0) {
+        fprintf(stderr, "Wrong signal format\n");
+        exit(errno);
+      }
+
       if (signal == SIGPIPE) {
         fprintf(stderr, "Can't use SIGPIPE\n");
         exit(EXIT_FAILURE);
       }
+
       givenData.signal = strdup(optarg);
+
       break;
     case 'h': {
       strtof(optarg, &p);
-      if (*p != '/') {
+
+      if (errno != 0 || *p != '/') {
         fprintf(stderr, "Wrong pace format\n");
         exit(EXIT_FAILURE);
       }
       p++;
       strtof(p, &p);
-      if (*p != '\0') {
+      if (optarg == p || errno != 0 || *p != 0) {
         fprintf(stderr, "Wrong pace format\n");
         exit(EXIT_FAILURE);
       }
@@ -33,14 +43,14 @@ int readParameters(int argc, char **argv) {
     }
     case 'r': {
       strtof(optarg, &p);
-      if (*p != '/') {
+      if (errno != 0 || *p != '/') {
         fprintf(stderr, "Wrong endurance format\n");
         exit(EXIT_FAILURE);
       }
       p++;
       strtof(p, &p);
-      if (*p != '\0') {
-        fprintf(stderr, "Wrong endurance format\n");
+      if (optarg == p || errno != 0 || *p != 0) {
+        fprintf(stderr, "Wrong edurance format\n");
         exit(EXIT_FAILURE);
       }
       givenData.endurance = strdup(optarg);
@@ -57,7 +67,7 @@ int readParameters(int argc, char **argv) {
   }
 
   for (int i = optind; i < argc; i++) {
-    
+
     givenData.positionals[processesCount] = strdup(argv[i]);
     processesCount++;
   }
@@ -77,15 +87,15 @@ void produceProcesses(int processesCount, int *pipeFd) {
     produceParasites(processesCount, pid, pipeFd);
     exit(EXIT_SUCCESS);
   default: {
-    char *args[] = {
-        "./ODP/provider", "-s", givenData.signal, "-h", givenData.pace,
-        givenData.endurance,    NULL};
+    char *args[] = {"./provider", "-s",           givenData.signal,
+                    "-h",         givenData.pace, givenData.endurance,
+                    NULL};
 
     if (dup2(pipeFd[0], STDIN_FILENO) == -1) {
       perror("Dup2 failure");
       exit(EXIT_FAILURE);
     }
-    if (execv("./ODP/provider", args) == -1) {
+    if (execv("./provider", args) == -1) {
       perror("Execv failure");
       exit(EXIT_FAILURE);
     }
@@ -104,12 +114,9 @@ void produceParasites(int processesCount, pid_t pid, int *pipeFd) {
       char *toSeparate = strdup(givenData.positionals[i]);
       char *interval = strsep(&toSeparate, ":");
       char *initialValue = strsep(&toSeparate, ":");
-      char *args[] = {"./ODP/parasite",
-                      strcat("-s", givenData.signal),
-                      "-p",
-                      strcat("-d", interval),
-                      "-v",
-                      initialValue,
+      char *args[] = {"./parasite", strcat("-s", givenData.signal),
+                      "-p",         strcat("-d", interval),
+                      "-v",         initialValue,
                       NULL};
 
       if (dup2(pipeFd[1], STDOUT_FILENO) == -1) {
@@ -117,8 +124,7 @@ void produceParasites(int processesCount, pid_t pid, int *pipeFd) {
         exit(EXIT_FAILURE);
       }
 
-      if (execv("./ODP/parasite", args) == -1)
-      {
+      if (execv("./parasite", args) == -1) {
         fprintf(stderr, "Execv failure\n");
         exit(EXIT_FAILURE);
       }
