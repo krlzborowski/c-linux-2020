@@ -6,7 +6,9 @@ void readParameters(int argc, char *argv[]) {
   while ((opt = getopt(argc, argv, "s:h:")) != -1) {
     switch (opt) {
     case 's':
+
       givenData.signal = (int)strtol(optarg, &p, 10);
+
       if (optarg == p || errno != 0 || *p != 0) {
         fprintf(stderr, "Wrong signal format\n");
         exit(EXIT_FAILURE);
@@ -22,7 +24,7 @@ void readParameters(int argc, char *argv[]) {
 
       p++;
       givenData.interval = strtof(p, &p);
-      if (optarg == p || errno != 0 || *p != 0 ) {
+      if (optarg == p || errno != 0 || *p != 0) {
         fprintf(stderr, "Wrong interval format\n");
         exit(EXIT_FAILURE);
       }

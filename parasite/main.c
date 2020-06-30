@@ -5,8 +5,7 @@
 
 int main(int argc, char *argv[]) {
 
-  fprintf(stderr, "Parasite ready\n");
-  fflush(stderr);
+
   
   int pid = getpid();
   struct timespec interval;
@@ -22,7 +21,8 @@ int main(int argc, char *argv[]) {
   setSignalHandler();
   setInterval(&interval);
 
-
+  fprintf(stderr, "Parasite ready\n");
+  fflush(stderr);
 
   for(ever) {
     if (isSigPipe) {

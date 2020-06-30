@@ -105,7 +105,9 @@ void produceProcesses(int processesCount, int *pipeFd) {
 
 void produceParasites(int processesCount, pid_t pid, int *pipeFd) {
   pid_t childPid;
+
   for (size_t i = 0; i < processesCount; i++) {
+
     switch (childPid = fork()) {
     case -1:
       fprintf(stderr, "Fork failure\n");
@@ -130,6 +132,7 @@ void produceParasites(int processesCount, pid_t pid, int *pipeFd) {
       }
     }
     default:
+
       break;
     }
   }

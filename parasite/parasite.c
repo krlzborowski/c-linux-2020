@@ -2,8 +2,10 @@
 
 void readParameters(int argc, char *argv[]) {
   int opt;
+
   while ((opt = getopt(argc, argv, "s:p:d:v:")) != -1) {
     char *p;
+    errno = 0;
     switch (opt) {
     case 's':
 
@@ -93,10 +95,12 @@ void setSignalHandler() {
     perror("Sigaction error");
     exit(EXIT_FAILURE);
   }
+      
   if (sigaction(givenData.signal, &signalAction, NULL) == -1) {
     perror("Sigaction error");
     exit(EXIT_FAILURE);
   }
+
 }
 
 void setSigRTHandler() {
