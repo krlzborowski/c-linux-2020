@@ -5,8 +5,6 @@
 
 int main(int argc, char *argv[]) {
 
-
-  
   int pid = getpid();
   struct timespec interval;
   struct timespec remain;
@@ -21,10 +19,7 @@ int main(int argc, char *argv[]) {
   setSignalHandler();
   setInterval(&interval);
 
-  fprintf(stderr, "Parasite ready\n");
-  fflush(stderr);
-
-  for(ever) {
+  for (ever) {
     if (isSigPipe) {
       report(pid);
       exit(141);
@@ -35,6 +30,10 @@ int main(int argc, char *argv[]) {
     nanosleep(&interval, &remain);
 
     if (isConfirmation) {
+
+      fprintf(stderr, "Parasite: confirmation received\n");
+      fflush(stderr);
+
       requestsRegister += requestsRegister / 4;
       satisfiedRequestsCount++;
       isConfirmation = 0;

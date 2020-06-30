@@ -1,5 +1,8 @@
 #include "provider.h"
 
+static pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+
 void readParameters(int argc, char *argv[]) {
   int opt;
   char *p;
@@ -62,6 +65,7 @@ void createTimer() {
   struct sigevent signalEvent;
   memset(&signalEvent, 0, sizeof(struct sigevent));
   signalEvent.sigev_notify = SIGEV_THREAD;
+  signalEvent.sigev_value.sival_ptr = (void *)&resource;
   signalEvent.sigev_notify_function = &onTimer;
   if (timer_create(CLOCK_REALTIME, &signalEvent, &timer) == -1) {
     perror("Timer creation failure");
@@ -84,15 +88,51 @@ void setTimer() {
   }
 }
 
-void onTimer(union sigval sv) { resource += givenData.incrementValue; }
+void onTimer(union sigval sv) {
+
+  int s;
+
+  s = pthread_mutex_lock(&mtx);
+  if (s != 0) {
+    perror("Mutex lock failure");
+    exit(EXIT_FAILURE);
+  }
+
+  *(float *)sv.sival_ptr += givenData.incrementValue;
+
+  s = pthread_mutex_unlock(&mtx);
+  if (s != 0) {
+    perror("Mutex unlock failure");
+    exit(EXIT_FAILURE);
+  }
+
+  s = pthread_cond_signal(&cond);
+  if (s != 0) {
+    perror("Thread condition failure");
+    exit(EXIT_FAILURE);
+  }
+}
 
 void processRequest(int pid, float toSubstract) {
+
   if (toSubstract > 0 && toSubstract <= resource) {
     resource -= toSubstract;
-    kill(pid, givenData.signal);
+
+
+    if (kill(pid, givenData.signal) == -1) {
+      perror("Signal kill failure");
+      exit(EXIT_FAILURE);
+    }
   } else if (toSubstract < 0 && -toSubstract <= resource) {
+
     resource += toSubstract;
-    kill(pid, givenData.signal);
+
+    // fprintf(stderr, "Provider:%f %f\n", resource, toSubstract);
+    // fflush(stderr);
+    if (kill(pid, givenData.signal) == -1) {
+      perror("Signal kill failure");
+      exit(EXIT_FAILURE);
+    }
   }
 }
 

@@ -4,7 +4,7 @@
 int main(int argc, char *argv[]) {
 
   char buff[BUF_SIZE];
-  char* readPointer;
+  char *readPointer;
   int pid;
   float toSubstract;
   resource = 0.0f;
@@ -16,22 +16,20 @@ int main(int argc, char *argv[]) {
 
   for (ever) {
 
-    if (read(0, buff, sizeof(buff))== -1)
+    fprintf(stderr, "Provider: %f %f\n", resource, toSubstract);
+    fflush(stderr);
+
+    if (read(0, buff, sizeof(buff)) == -1)
       continue;
-    toSubstract = -1.0;
+
     pid = -1;
+    toSubstract = -1.0;
     pid = (int)strtol(buff, &readPointer, 10);
     toSubstract = strtof(readPointer, NULL);
 
     if (pid != -1 && toSubstract != -1.0) {
-      fprintf(stderr, "Provider:%d %f\n", pid, toSubstract);
-      fflush(stderr);
-
       processRequest(pid, toSubstract);
     }
-
-    pid = -1;
-    toSubstract = -1.0;
   }
 
   timer_delete(timer);

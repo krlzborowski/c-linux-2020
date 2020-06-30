@@ -78,10 +78,8 @@ void sendReminder() {
   sv.sival_ptr = NULL;
   lastSigRT = signal;
   setSigRTHandler();
-  if (sigqueue(givenData.pid, signal, sv) == -1) {
-    perror("Sigque failure");
-    exit(EXIT_FAILURE);
-  }
+
+  sigqueue(givenData.pid, signal, sv);
   remindersCount++;
   totalRemindersCount++;
 }
@@ -139,4 +137,5 @@ void report(int pid) {
   fprintf(stderr, "\nSent reminders       %d", remindersCount);
   fprintf(stderr, "\nResponses            %d", responseCount);
   fprintf(stderr, "\nConfirmed            %d", isConfirmation);
+  fflush(stderr);
 }

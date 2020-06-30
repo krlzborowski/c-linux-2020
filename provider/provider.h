@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <pthread.h>
 
 
 #define ever ;;
@@ -31,7 +32,7 @@ typedef struct dataStruct {
 } DataStruct;
 
 EXTERN DataStruct givenData;
-EXTERN float resource;
+EXTERN volatile float resource;
 EXTERN timer_t timer;
 EXTERN int isAnsweringSignal;
 
