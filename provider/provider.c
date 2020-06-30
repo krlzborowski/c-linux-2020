@@ -101,7 +101,6 @@ void onTimer(union sigval sv) {
 
   *(float *)sv.sival_ptr += givenData.incrementValue;
 
-
   s = pthread_mutex_unlock(&mtx);
   if (s != 0) {
     perror("Mutex unlock failure");
@@ -126,7 +125,6 @@ void processRequest(int pid, float toSubstract) {
     }
   } else if (toSubstract < 0 && -toSubstract <= resource) {
     resource += toSubstract;
-
     if (kill(pid, givenData.signal) == -1) {
       perror("Signal kill failure");
       exit(EXIT_FAILURE);

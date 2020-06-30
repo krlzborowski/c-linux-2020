@@ -12,7 +12,7 @@ link: compile
 	ln -s ../familiada/familiada ODP/familiada
 
 clean:
-	rm -f ODP/*
+	rm -rf ODP
 	cd provider && make clean
 	cd parasite && make clean
 	cd familiada && make clean
