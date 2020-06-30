@@ -12,8 +12,5 @@ int main(int arg, char *argv[]) {
   pipeFd = setPipe();
 
   produceProcesses(processesCount, pipeFd);
-  fprintf(stderr, "%d %d\n", pipeFd[0], pipeFd[1]);
-  fflush(stderr);
-
   return 0;
 }

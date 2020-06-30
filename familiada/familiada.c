@@ -113,6 +113,7 @@ void produceParasites(int processesCount, pid_t pid, int *pipeFd) {
       fprintf(stderr, "Fork failure\n");
       exit(EXIT_FAILURE);
     case 0: {
+
       char *toSeparate = strdup(givenData.positionals[i]);
       char *interval = strsep(&toSeparate, ":");
       char *initialValue = strsep(&toSeparate, ":");
@@ -132,7 +133,6 @@ void produceParasites(int processesCount, pid_t pid, int *pipeFd) {
       }
     }
     default:
-
       break;
     }
   }

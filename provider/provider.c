@@ -82,6 +82,7 @@ void setTimer() {
   ts.it_value.tv_nsec = (seconds - (float)ts.it_value.tv_sec) * 1000000000;
   ts.it_interval.tv_nsec = ts.it_value.tv_nsec;
   ts.it_interval.tv_sec = ts.it_value.tv_sec;
+
   if (timer_settime(timer, 0, &ts, NULL) == -1) {
     perror("Timer setting failure");
     exit(EXIT_FAILURE);
@@ -99,6 +100,7 @@ void onTimer(union sigval sv) {
   }
 
   *(float *)sv.sival_ptr += givenData.incrementValue;
+
 
   s = pthread_mutex_unlock(&mtx);
   if (s != 0) {
@@ -118,17 +120,13 @@ void processRequest(int pid, float toSubstract) {
   if (toSubstract > 0 && toSubstract <= resource) {
     resource -= toSubstract;
 
-
     if (kill(pid, givenData.signal) == -1) {
       perror("Signal kill failure");
       exit(EXIT_FAILURE);
     }
   } else if (toSubstract < 0 && -toSubstract <= resource) {
-
     resource += toSubstract;
 
-    // fprintf(stderr, "Provider:%f %f\n", resource, toSubstract);
-    // fflush(stderr);
     if (kill(pid, givenData.signal) == -1) {
       perror("Signal kill failure");
       exit(EXIT_FAILURE);

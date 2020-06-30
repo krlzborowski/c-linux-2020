@@ -15,10 +15,6 @@ int main(int argc, char *argv[]) {
   createTimer();
 
   for (ever) {
-
-    fprintf(stderr, "Provider: %f %f\n", resource, toSubstract);
-    fflush(stderr);
-
     if (read(0, buff, sizeof(buff)) == -1)
       continue;
 
