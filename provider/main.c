@@ -18,8 +18,6 @@ int main(int argc, char *argv[]) {
     if (read(0, buff, sizeof(buff)) == -1)
       continue;
 
-    fprintf(stderr, "Provider: confirmation received\n");
-    fflush(stderr);
     pid = -1;
     toSubstract = -1.0;
     pid = (int)strtol(buff, &readPointer, 10);

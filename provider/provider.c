@@ -1,8 +1,5 @@
 #include "provider.h"
 
-static pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
-static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
-
 void readParameters(int argc, char *argv[]) {
   int opt;
   char *p;
@@ -91,34 +88,15 @@ void setTimer() {
 
 void onTimer(union sigval sv) {
 
-  int s;
-
-  s = pthread_mutex_lock(&mtx);
-  if (s != 0) {
-    perror("Mutex lock failure");
-    exit(EXIT_FAILURE);
-  }
-
   *(float *)sv.sival_ptr += givenData.incrementValue;
-
-
-  s = pthread_mutex_unlock(&mtx);
-  if (s != 0) {
-    perror("Mutex unlock failure");
-    exit(EXIT_FAILURE);
-  }
-
-  s = pthread_cond_signal(&cond);
-  if (s != 0) {
-    perror("Thread condition failure");
-    exit(EXIT_FAILURE);
-  }
 }
 
 void processRequest(int pid, float toSubstract) {
 
   if (toSubstract > 0 && toSubstract <= resource) {
     resource -= toSubstract;
+    fprintf(stderr, "Prov: hit\n");
+    fflush(stderr);
 
     if (kill(pid, givenData.signal) == -1) {
       perror("Signal kill failure");
@@ -126,6 +104,8 @@ void processRequest(int pid, float toSubstract) {
     }
   } else if (toSubstract < 0 && -toSubstract <= resource) {
     resource += toSubstract;
+    fprintf(stderr, "Prov: hit\n");
+    fflush(stderr);
 
     if (kill(pid, givenData.signal) == -1) {
       perror("Signal kill failure");
