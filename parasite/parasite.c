@@ -130,12 +130,12 @@ void setInterval(struct timespec *timeInterval) {
 }
 
 void report(int pid) {
-  fprintf(stderr, "\nPID                  %d\n", pid);
+  fprintf(stderr, "\nPID                  %d", pid);
   fprintf(stderr, "\nSatisfied requests   %d", satisfiedRequestsCount);
   fprintf(stderr, "\nTotal sent reminders %d", totalRemindersCount);
   fprintf(stderr, "\nRequests value       %f", requestsRegister);
   fprintf(stderr, "\nSent reminders       %d", remindersCount);
   fprintf(stderr, "\nResponses            %d", responseCount);
-  fprintf(stderr, "\nConfirmed            %d", isConfirmation);
+  fprintf(stderr, "\nConfirmed            %d\n", isConfirmation);
   fflush(stderr);
 }
