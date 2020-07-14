@@ -78,7 +78,6 @@ void sendReminder() {
   sv.sival_ptr = NULL;
   lastSigRT = signal;
   setSigRTHandler();
-
   sigqueue(givenData.pid, signal, sv);
   remindersCount++;
   totalRemindersCount++;
@@ -93,12 +92,11 @@ void setSignalHandler() {
     perror("Sigaction error");
     exit(EXIT_FAILURE);
   }
-      
+
   if (sigaction(givenData.signal, &signalAction, NULL) == -1) {
     perror("Sigaction error");
     exit(EXIT_FAILURE);
   }
-
 }
 
 void setSigRTHandler() {
@@ -113,7 +111,6 @@ void setSigRTHandler() {
 }
 
 void signalHandler(int signal) {
-
   if (signal == givenData.signal) {
     isConfirmation = 1;
   } else if (signal == SIGPIPE) {
