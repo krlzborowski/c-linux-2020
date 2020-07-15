@@ -30,9 +30,6 @@ int main(int argc, char *argv[]) {
     nanosleep(&interval, &remain);
 
     if (isConfirmation) {
-
-      fprintf(stderr, "Parasite: confirmation received\n");
-      fflush(stderr);
       requestsRegister += requestsRegister / 4;
       satisfiedRequestsCount++;
       isConfirmation = 0;

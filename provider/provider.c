@@ -95,18 +95,12 @@ void processRequest(int pid, float toSubstract) {
 
   if (toSubstract > 0 && toSubstract <= resource) {
     resource -= toSubstract;
-    fprintf(stderr, "Prov: hit\n");
-    fflush(stderr);
-
     if (kill(pid, givenData.signal) == -1) {
       perror("Signal kill failure");
       exit(EXIT_FAILURE);
     }
   } else if (toSubstract < 0 && -toSubstract <= resource) {
     resource += toSubstract;
-    fprintf(stderr, "Provider: hit\n");
-    fflush(stderr);
-
     if (kill(pid, givenData.signal) == -1) {
       perror("Signal kill failure");
       exit(EXIT_FAILURE);
@@ -178,8 +172,7 @@ void setSignalHandlers() {
           break;
         else if (handling[j - SIGRTMIN] == 0 || answering[j - SIGRTMIN] == 1) {
           continue;
-        }
-        else if (rand() % 2 == 0) {
+        } else if (rand() % 2 == 0) {
           if (sigaction(j, &signalAction2, NULL) == -1) {
             perror("Sigaction error:");
             exit(EXIT_FAILURE);
@@ -190,7 +183,6 @@ void setSignalHandlers() {
       }
     }
   }
-
 
   free(handling);
   free(answering);
