@@ -13,6 +13,8 @@ int main(int argc, char *argv[]) {
   readParameters(argc, argv);
   setSignalHandlers();
   createTimer();
+  fprintf(stderr, "Provider: all set\n");
+  fflush(stderr);
 
   for (ever) {
     if (read(0, buff, sizeof(buff)) == -1)

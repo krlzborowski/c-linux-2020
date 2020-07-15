@@ -7,20 +7,19 @@
 #define EXTERN extern
 #endif
 
-#include <unistd.h>
+#include <errno.h>
 #include <getopt.h>
+#include <pthread.h>
 #include <signal.h>
-#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
-#include <pthread.h>
-
+#include <time.h>
+#include <unistd.h>
 
 #define ever ;;
 #define BUF_SIZE 128
-#define SIGRT_NUM SIGRTMAX-SIGRTMIN+1
+#define SIGRT_NUM SIGRTMAX - SIGRTMIN + 1
 
 typedef struct dataStruct {
   int signal;

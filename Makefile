@@ -1,7 +1,7 @@
 all: compile link
 
 compile: clean
-	cd familiada && make
+	# cd familiada && make
 	cd parasite && make
 	cd provider && make
 
@@ -15,4 +15,4 @@ clean:
 	rm -rf ODP
 	cd provider && make clean
 	cd parasite && make clean
-	cd familiada && make clean
+	# cd familiada && make clean

@@ -104,7 +104,7 @@ void processRequest(int pid, float toSubstract) {
     }
   } else if (toSubstract < 0 && -toSubstract <= resource) {
     resource += toSubstract;
-    fprintf(stderr, "Prov: hit\n");
+    fprintf(stderr, "Provider: hit\n");
     fflush(stderr);
 
     if (kill(pid, givenData.signal) == -1) {
@@ -128,19 +128,31 @@ void setSignalHandlers() {
   int i = 0;
   int toHandle = (int)((float)(SIGRT_NUM)*givenData.notKillingPercent / 100.0);
 
-  while (i < toHandle) {
+  if (givenData.notKillingPercent == 100.0) {
     for (int j = SIGRTMIN; j < SIGRTMAX; j++) {
-      if (i >= toHandle)
-        break;
-      else if (handling[j - SIGRTMIN] == 1)
-        continue;
-      else if (rand() % 2 == 0) {
-        if (sigaction(j, &signalAction, NULL) == -1) {
-          perror("Sigaction error:");
-          exit(EXIT_FAILURE);
+      if (sigaction(j, &signalAction, NULL) == -1) {
+        perror("Sigaction error:");
+        exit(EXIT_FAILURE);
+      }
+      handling[j - SIGRTMIN] = 1;
+    }
+  } else {
+
+    while (i < toHandle) {
+      for (int j = SIGRTMIN; j < SIGRTMAX; j++) {
+        if (i >= toHandle)
+          break;
+        else if (handling[j - SIGRTMIN] == 1)
+          continue;
+        else if (rand() % 2 == 0) {
+          if (sigaction(j, &signalAction, NULL) == -1) {
+            perror("Sigaction error:");
+            exit(EXIT_FAILURE);
+          }
+
+          handling[j - SIGRTMIN] = 1;
+          i++;
         }
-        handling[j - SIGRTMIN] = 1;
-        i++;
       }
     }
   }
@@ -148,22 +160,38 @@ void setSignalHandlers() {
   i = 0;
   toHandle = (int)((float)toHandle * givenData.sendResponsePercent / 100.0);
 
-  while (i < toHandle) {
+  if (givenData.sendResponsePercent == 100.0) {
+
     for (int j = SIGRTMIN; j < SIGRTMAX; j++) {
-      if (i >= toHandle)
-        break;
-      else if (handling[j - SIGRTMIN] == 0 || answering[j - SIGRTMIN] == 1)
-        continue;
-      else if (rand() % 2 == 0) {
+      if (handling[j - SIGRTMIN] == 1) {
         if (sigaction(j, &signalAction2, NULL) == -1) {
           perror("Sigaction error:");
           exit(EXIT_FAILURE);
         }
-        answering[j - SIGRTMIN] = 1;
-        i++;
+      }
+    }
+  } else {
+    while (i < toHandle) {
+      for (int j = SIGRTMIN; j < SIGRTMAX; j++) {
+
+        if (i >= toHandle)
+          break;
+        else if (handling[j - SIGRTMIN] == 0 || answering[j - SIGRTMIN] == 1) {
+          continue;
+        }
+        else if (rand() % 2 == 0) {
+          if (sigaction(j, &signalAction2, NULL) == -1) {
+            perror("Sigaction error:");
+            exit(EXIT_FAILURE);
+          }
+          answering[j - SIGRTMIN] = 1;
+          i++;
+        }
       }
     }
   }
+
+
   free(handling);
   free(answering);
 }
