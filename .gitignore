@@ -1,6 +1,9 @@
+# Other local directories
+ODP/
+familiada/
+
 # Editor files
 .vscode/
-ODP/
 
 # Packages
 *.tar.gz
